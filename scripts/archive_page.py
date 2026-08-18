@@ -49,9 +49,9 @@ def extract(page_bytes: bytes, selector: str, url: str) -> str:
         raise RuntimeError(f"selector {selector!r} matched nothing on {url}")
 
     root = matches[0]
-    comments_meta = root.cssselect(".meta-item.comments")
-    if comments_meta:
-        comments_meta[0].clear()
+    comments_nodes = root.xpath('.//*[@class="meta-item comments"]')
+    if comments_nodes:
+        comments_nodes[0].clear()
 
     return html.tostring(root, encoding="unicode", pretty_print=True)
 
