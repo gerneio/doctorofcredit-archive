@@ -47,7 +47,13 @@ def extract(page_bytes: bytes, selector: str, url: str) -> str:
     matches = doc.xpath(f"//{selector}")
     if not matches:
         raise RuntimeError(f"selector {selector!r} matched nothing on {url}")
-    return html.tostring(matches[0], encoding="unicode", pretty_print=True)
+
+    root = matches[0]
+    comments_meta = root.cssselect(".meta-item.comments")
+    if comments_meta:
+        comments_meta[0].clear()
+
+    return html.tostring(root, encoding="unicode", pretty_print=True)
 
 
 def archive_page(page_path: str, selector: str) -> None:
